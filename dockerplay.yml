@@ -1,0 +1,9 @@
+---
+- 
+  host: all 
+
+
+  task:
+  - name: update my ubuntu sytem
+    ansible.builtin.apt:
+    update_cache: yes
