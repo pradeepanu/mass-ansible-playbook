@@ -47,10 +47,10 @@
         - docker-compose-plugin
     tags:
     - docker 
-  - name: add userpermission
-    shell: "usermod -aG docker {{lookup('env','USER')}}"
-    tags:
-    - permission 
+  #- name: add userpermission
+  # shell: "usermod -aG docker {{lookup('env','USER')}}"
+  #  tags:
+   # - permission 
   - name: install python package manage
     apt:
       name: python3-pip
