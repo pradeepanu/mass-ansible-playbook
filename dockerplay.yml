@@ -6,9 +6,9 @@
   become: yes
 #vars: variable that will apply to the play
   tasks: 
-  - name: update my system
-    apt:
-      update_cache: yes
+ # - name: update my system
+ #  apt:
+ #    update_cache: yes
   - name: Install a list of packages for docker
     ansible.builtin.apt:
       pkg:
