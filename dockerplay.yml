@@ -1,38 +1,65 @@
+#yaml document start with ----
 ---
 - #this minus is required in yaml it indicate list of items. Playbook contains a list of play and every play will be a dictionary
 #host: where you want to run your playbook
   hosts: all
- # become: yes
+  become: yes
 #vars: variable that will apply to the play
+  vars: #is a keywoad
+    myurl: "https://releases.ansible.com/ansible/ansible-2.9.9.tar.gz"
+    mycrc: "sha256:https://releases.ansible.com/ansible/ansible-2.9.9.tar.gz.sha"
+    mydest: "/tmp/"
+    
+    container_count: 4
+    default_container_name: docker 
+    default_container_image: ubuntu 
+    default_container_command: sleep 1d
   tasks: 
- # - name: update my system
- #  apt:
- #    update_cache: yes
-  - name: Install a list of packages for docker
-    ansible.builtin.apt:
-      pkg:
-      - ca-certificates
-      - curl
-      - gnupg
-      - lsb-release
-  - name: Download gpg key for docker 
-    ansible.builtin.apt_key:
+  - name: update my system
+    apt:
+      update_cache: yes
+  - name: install prerequsitis
+    apt:
+      name: 
+        - ca-certificates
+        - curl
+        - gnupg
+        - lsb-release
+      update_cache: yes
+    tags:
+    - dependency
+  - name: add docker gpg key 
+    apt_key:
       url: https://download.docker.com/linux/ubuntu/gpg
-      state: present  
-  - name: add docker repo 
-    ansible.builtin.apt_repository:
+    tags:
+    - gpg 
+  - name: add the docker repo 
+    apt_repository:
       repo: deb https://download.docker.com/linux/ubuntu focal stable
-      state: present
+    tags:
+    - repo 
   - name: install docker 
-    ansible.builtin.apt:
-      pkg:
-      - docker-ce
-      - docker-ce-cli
-      - containerd.io
-      - docker-compose-plugin
+    apt:
+      name: 
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io 
+        - docker-compose-plugin
+    tags:
+    - docker 
+  - name: add userpermission
+    shell: "usermod -aG docker {{lookup('env','USER')}}"
+    tags:
+    - permission 
   - name: install python package manage
-    apt: 
-      name: python3-pip 
+    apt:
+      name: python3-pip
+    tags: 
+    - python-pip 
   - name: install docker module for python 
-    pip:
-      name: docker
+    pip: 
+      name: docker 
+ 
+  #- name: deploy my container 
+   # include_tasks: container.yml 
+    #tags: container  
