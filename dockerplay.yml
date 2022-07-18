@@ -3,7 +3,7 @@
 - #this minus is required in yaml it indicate list of items. Playbook contains a list of play and every play will be a dictionary
 #host: where you want to run your playbook
   hosts: all
-  become: yes
+ # become: yes
 #vars: variable that will apply to the play
   tasks: 
  # - name: update my system
